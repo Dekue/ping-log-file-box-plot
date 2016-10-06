@@ -120,17 +120,22 @@ namespace PingMedian
                         {
                         }
 
-                        string newPath = args[0] + ".median";
+                        string newPath = args[0] + ".boxplot";
                         StreamWriter newF = new StreamWriter(newPath, false);
 
+                        newF.WriteLine("produced latex-style pgfplot boxplot: 'line' 'median' 'lower quartile' 'upper quartile' 'upper whisker' 'lower whisker'");
                         newF.WriteLine("x " + median.ToString(CultureInfo.GetCultureInfo("en-US")) + " " +
                             Q25.ToString(CultureInfo.GetCultureInfo("en-US")) + " " +
                             Q75.ToString(CultureInfo.GetCultureInfo("en-US")) + " " +
                             upperWhisker.ToString(CultureInfo.GetCultureInfo("en-US")) + " " +
-                            lowerWhisker.ToString(CultureInfo.GetCultureInfo("en-US")));
-                        //newF.WriteLine("WhiskerMax: " + (IQR * 1.5 + Q75) + ", WhiskerMin: " + (Q25 - IQR * 1.5));
-                        newF.WriteLine("lower outliers: " + lowerOutlier + ", extreme lower outliers: " + lowerExtremeOutlier + " (Min: " + l.Min() + ")");
-                        newF.WriteLine("upper outliers: " + upperOutlier + ", extreme upper outliers: " + upperExtremeOutlier + " (Max: " + l.Max() + ")");
+                            lowerWhisker.ToString(CultureInfo.GetCultureInfo("en-US")) + "{0}", Environment.NewLine);
+                        newF.WriteLine("additional information:");
+                        newF.WriteLine("whisker max: " + (IQR * 1.5 + Q75).ToString(CultureInfo.GetCultureInfo("en-US")) + 
+                            ", whisker min: " + (Q25 - IQR * 1.5).ToString(CultureInfo.GetCultureInfo("en-US")));
+                        newF.WriteLine("lower outliers: " + lowerOutlier + ", extreme lower outliers: " + lowerExtremeOutlier +
+                            " (Min: " + l.Min().ToString(CultureInfo.GetCultureInfo("en-US")) + ")");
+                        newF.WriteLine("upper outliers: " + upperOutlier + ", extreme upper outliers: " + upperExtremeOutlier +
+                            " (Max: " + l.Max().ToString(CultureInfo.GetCultureInfo("en-US")) + ")");
                         newF.WriteLine("packets transmitted: " + transmitted + ", received: " + received + ", packet loss: " + (transmitted - received));
                         newF.Close();
                     }
@@ -140,10 +145,10 @@ namespace PingMedian
                     }
                 }
                 else
-                    System.Console.WriteLine("Please specify the path to a sortable Textfile as an argument.");
+                    System.Console.WriteLine("Please specify the path to a ping log file as an argument.");
             }
             else
-                System.Console.WriteLine("Please specify the path to a sortable Textfile as an argument.");
+                System.Console.WriteLine("Please specify the path to a ping log file as an argument.");
         }
     }
 }
